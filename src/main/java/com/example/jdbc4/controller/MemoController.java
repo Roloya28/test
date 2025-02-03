@@ -4,7 +4,10 @@ import com.example.jdbc4.dto.MemoRequestDto;
 import com.example.jdbc4.dto.MemoResponseDto;
 import com.example.jdbc4.service.MemoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,33 +16,27 @@ public class MemoController {
     private final MemoService memoService;
 
     @PostMapping("/memos")
-    public MemoRequestDto save (@RequestBody MemoRequestDto dto) {
-        return memoService.save(dto);
+    public ResponseEntity<MemoResponseDto> saveMemo(@RequestBody MemoRequestDto dto) {
+        return ResponseEntity.ok(memoService.saveMemo(dto));
     }
 
-    // Read All API
     @GetMapping("/memos")
-    public List<MemoResponseDto> findAll() {
-        return memoService.findAll();
+    public ResponseEntity<List<MemoResponseDto>> findById() {
+        return ResponseEntity.ok(memoService.findAll());
     }
 
-    // Read One API
-    @GetMapping("/memos/{memoId}")
-    public MemoResponseDto findByID(@PathVariable Long memoId) {
-        return memoService.findById(memoId);
+    @GetMapping("/memos/{id}")
+    public ResponseEntity<MemoResponseDto> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(memoService.findById(id));
     }
 
-    @PutMapping("/memos/{memoId}")
-    public MemoResponseDto update(
-            @PathVariable Long memoId,
-            @RequestBody MemoRequestDto dto
-    ) {
-        return memoService.update(memoId, dto);
+    @PutMapping("/memos/{id}")
+    public ResponseEntity<MemoResponseDto> updateContent(@PathVariable Long id, @RequestBody MemoRequestDto dto) {
+        return ResponseEntity.ok(memoService.updateContent(id, dto));
     }
 
-    // Delete API
-    @DeleteMapping("/memos/{memoId}")
-    public void deleteById(@PathVariable Long memoId) {
-        memoService.deleteById(memoId);
+    @DeleteMapping("/memos/{id}")
+    public void delete(@PathVariable Long id) {
+        memoService.delete(id);
     }
 }
