@@ -15,28 +15,35 @@ public class MemoController {
 
     private final MemoService memoService;
 
+    // Create API
     @PostMapping("/memos")
-    public ResponseEntity<MemoResponseDto> saveMemo(@RequestBody MemoRequestDto dto) {
-        return ResponseEntity.ok(memoService.saveMemo(dto));
+    public MemoResponseDto save(@RequestBody MemoRequestDto dto) {
+        return memoService.save(dto);
     }
 
+    // Read All API
     @GetMapping("/memos")
-    public ResponseEntity<List<MemoResponseDto>> findById() {
-        return ResponseEntity.ok(memoService.findAll());
+    public List<MemoResponseDto> findAll() {
+        return memoService.findAll();
     }
 
+    // Read One API
     @GetMapping("/memos/{id}")
-    public ResponseEntity<MemoResponseDto> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(memoService.findById(id));
+    public MemoResponseDto findById (@PathVariable Long memoId) {
+        return memoService.findById(memoId);
     }
 
     @PutMapping("/memos/{id}")
-    public ResponseEntity<MemoResponseDto> updateContent(@PathVariable Long id, @RequestBody MemoRequestDto dto) {
-        return ResponseEntity.ok(memoService.updateContent(id, dto));
+    public MemoResponseDto update(
+            @PathVariable Long memoId,
+            @RequestBody MemoRequestDto dto
+    ) {
+        return memoService.update(memoId, dto);
     }
 
+    // delete API
     @DeleteMapping("/memos/{id}")
-    public void delete(@PathVariable Long id) {
-        memoService.delete(id);
+    public void delete(@PathVariable Long memoId) {
+        memoService.delete(memoId);
     }
 }

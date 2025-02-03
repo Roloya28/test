@@ -17,17 +17,20 @@ public class MemoService {
 
     private final MemoRepository memoRepository;
 
+    // save 메서드
     @Transactional
-    public MemoResponseDto saveMemo(MemoRequestDto dto) {
-        Memo memo = new Memo(dto.getContent());
-        Memo savedMemo = memoRepository.save(memo);
+    public MemoResponseDto save(MemoRequestDto dto) {
+        Memo memo = new Memo(dto.getContent()); // 저장되기 전의 Memo
+        Memo savedMemo = memoRepository.save(memo); // 저장된 Memo
         return new MemoResponseDto(savedMemo.getId(), savedMemo.getContent());
     }
 
+    // findAll 메서드
     @Transactional(readOnly = true)
     public List<MemoResponseDto> findAll() {
         List<Memo> memos = memoRepository.findAll();
 
+        // 리턴 타입을 맞추기 위한 dto 리스트 그릇
         List<MemoResponseDto> dtoList = new ArrayList<>();
         for (Memo memo : memos) {
             dtoList.add(new MemoResponseDto(memo.getId(), memo.getContent()));
@@ -36,6 +39,7 @@ public class MemoService {
         return dtoList;
     }
 
+    // findById 메서드
     @Transactional(readOnly = true)
     public MemoResponseDto findById(Long id) {
         Memo memo = memoRepository.findById(id).orElseThrow(
@@ -46,7 +50,7 @@ public class MemoService {
     }
 
     @Transactional
-    public MemoResponseDto updateContent(Long id, MemoRequestDto dto) {
+    public MemoResponseDto update(Long id, MemoRequestDto dto) {
 
         Memo memo = memoRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 메모가 없습니다.")
@@ -56,11 +60,13 @@ public class MemoService {
         return new MemoResponseDto(updatedMemo.getId(), updatedMemo.getContent());
     }
 
+    // delete 메서드
     @Transactional
     public void delete(Long id) {
+        // 삭제하기 전에 있나 없나 한 번 찾아보고 싶을때
         Memo memo = memoRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 메모가 없습니다.")
         );
-        memoRepository.deleteById(memo.getId());
+        memoRepository.deleteById(id);
     }
 }
